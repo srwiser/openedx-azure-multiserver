@@ -3,7 +3,7 @@
 # print commands and arguments as they are executed
 set -x
 
-echo "Starting Open edX fullstack install on pid $$"
+echo "Starting Open edX multiserver install on pid $$"
 date
 ps axjf
 
@@ -98,9 +98,9 @@ time git checkout appsembler/azureDeploy
 time sudo pip install -r requirements.txt
 cd playbooks
 
-curl https://raw.githubusercontent.com/tkeemon/openedx-azure-fullstack/master/server-vars.yml > /tmp/server-vars.yml
+curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
 sudo ansible-playbook -i localhost, -c local vagrant-fullstack.yml -e@/tmp/server-vars.yml $EXTRA_VARS
 
 date
-echo "Completed Open edX fullstack provision on pid $$"
+echo "Completed Open edX multiserver provision on pid $$"
