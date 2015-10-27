@@ -100,7 +100,7 @@ export EXTRA_VARS="-e edx_platform_version=$OPENEDX_RELEASE \
 ###################################################
 # Set database vars
 ###################################################
-export DB_VARS=' \
+export DB_VARS=" \
   -e EDXAPP_MYSQL_USER_HOST=% \
   -e EDXAPP_MYSQL_HOST=10.0.0.20 \
   -e EDXLOCAL_MYSQL_BIND_IP=0.0.0.0 \
@@ -108,7 +108,7 @@ export DB_VARS=' \
   -e XQUEUE_MYSQL_HOST=10.0.0.20 \
   -e ORA_MYSQL_HOST=10.0.0.20 \
   -e MONGO_BIND_IP=0.0.0.0 \
-'
+"
 
 ###################################################
 # Download configuration repo and start ansible
