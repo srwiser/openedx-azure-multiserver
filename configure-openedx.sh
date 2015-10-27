@@ -134,7 +134,7 @@ echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
-sudo ansible-playbook -i inventory.ini -u $AZUREUSER multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
+sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=/home/$AZUREUSER/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
 
 date
 echo "Completed Open edX multiserver provision on pid $$"
