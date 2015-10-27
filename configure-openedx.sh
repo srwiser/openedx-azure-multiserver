@@ -73,8 +73,8 @@ ensureAzureNetwork
 time sudo apt-get -y update && sudo apt-get -y upgrade
 sudo apt-get -y install sshpass
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
-sshpass -p $PASSWORD ssh-copy-id 10.0.0.20
-sshpass -p $PASSWORD ssh-copy-id 10.0.0.30
+sshpass -p $PASSWORD ssh-copy-id $AZUREUSER@10.0.0.20
+sshpass -p $PASSWORD ssh-copy-id $AZUREUSER@10.0.0.30
 
 ###################################################
 # Update Ubuntu and install prereqs
@@ -133,7 +133,7 @@ echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
-sudo ansible-playbook -i inventory.ini multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
+sudo ansible-playbook -i inventory.ini -u $AZUREUSER multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
 
 date
 echo "Completed Open edX multiserver provision on pid $$"
