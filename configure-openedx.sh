@@ -12,6 +12,7 @@ ps axjf
 #############
 
 AZUREUSER=$1
+PASSWORD=$2
 HOMEDIR="/home/$AZUREUSER"
 VMNAME=`hostname`
 echo "User: $AZUREUSER"
@@ -65,6 +66,15 @@ ensureAzureNetwork()
   fi
 }
 ensureAzureNetwork
+
+###################################################
+# Configure SSH keys
+###################################################
+time sudo apt-get -y update && sudo apt-get -y upgrade
+sudo apt-get -y install sshpass
+ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+sshpass -p $PASSWORD ssh-copy-id 10.0.0.20
+sshpass -p $PASSWORD ssh-copy-id 10.0.0.30
 
 ###################################################
 # Update Ubuntu and install prereqs
