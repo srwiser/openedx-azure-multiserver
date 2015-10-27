@@ -73,6 +73,9 @@ ensureAzureNetwork
 time sudo apt-get -y update && sudo apt-get -y upgrade
 sudo apt-get -y install sshpass
 ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+
+#copy so ansible can ssh localhost if it decides to
+cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && echo "Key copied to localhost"
 #terrible hack for getting keys onto db server
 cat ~/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.20 'cat >> .ssh/authorized_keys && echo "Key copied MySQL"'
 cat ~/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.30 'cat >> .ssh/authorized_keys && echo "Key copied MongoDB"'
