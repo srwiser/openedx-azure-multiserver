@@ -89,13 +89,26 @@ time sudo pip install --upgrade virtualenv
 # Pin specific version of Open edX (named-release/cypress for now)
 ###################################################
 export OPENEDX_RELEASE='named-release/cypress'
-EXTRA_VARS="-e edx_platform_version=$OPENEDX_RELEASE \
+export EXTRA_VARS="-e edx_platform_version=$OPENEDX_RELEASE \
   -e certs_version=$OPENEDX_RELEASE \
   -e forum_version=$OPENEDX_RELEASE \
   -e xqueue_version=$OPENEDX_RELEASE \
   -e configuration_version=appsembler/azureDeploy \
   -e edx_ansible_source_repo=https://github.com/appsembler/configuration \
 "
+
+###################################################
+# Set database vars
+###################################################
+export DB_VARS=' \
+  -e EDXAPP_MYSQL_USER_HOST=% \
+  -e EDXAPP_MYSQL_HOST=10.0.0.20 \
+  -e EDXLOCAL_MYSQL_BIND_IP=0.0.0.0 \
+  -e EDXLOCAL_MEMCACHED_BIND_IP=0.0.0.0 \
+  -e XQUEUE_MYSQL_HOST=10.0.0.20 \
+  -e ORA_MYSQL_HOST=10.0.0.20 \
+  -e MONGO_BIND_IP=0.0.0.0 \
+'
 
 ###################################################
 # Download configuration repo and start ansible
@@ -106,11 +119,21 @@ time git clone https://github.com/appsembler/configuration.git
 cd configuration
 time git checkout appsembler/azureDeploy
 time sudo pip install -r requirements.txt
-cd playbooks
+cd playbooks/appsemblerPlaybooks
+
+#create inventory.ini file
+echo "[mongo-server]" > inventory.ini
+echo "10.0.0.30" >> inventory.ini
+echo "" >> inventory.ini
+echo "[mysql-server]" >> inventory.ini
+echo "10.0.0.20" >> inventory.ini
+echo "" >> inventory.ini
+echo "[edxapp-server]" >> inventory.ini
+echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
-sudo ansible-playbook -i localhost, -c local vagrant-fullstack.yml -e@/tmp/server-vars.yml $EXTRA_VARS
+sudo ansible-playbook -i inventory.ini multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
 
 date
 echo "Completed Open edX multiserver provision on pid $$"
