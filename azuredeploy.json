@@ -382,7 +382,7 @@
           "vmSize": "[parameters('vmMySqlSize')]"
         },
         "osProfile": {
-          "computername": "[variables('vmAppName')]",
+          "computername": "[variables('vmMySQLName')]",
           "adminUsername": "[parameters('adminUsername')]",
           "adminPassword": "[parameters('adminPassword')]"
         },
