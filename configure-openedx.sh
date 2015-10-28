@@ -72,13 +72,16 @@ ensureAzureNetwork
 ###################################################
 time sudo apt-get -y update && sudo apt-get -y upgrade
 sudo apt-get -y install sshpass
-ssh-keygen -f ~/.ssh/id_rsa -t rsa -N ''
+ssh-keygen -f $HOMEDIR/.ssh/id_rsa -t rsa -N ''
 
 #copy so ansible can ssh localhost if it decides to
-cat ~/.ssh/id_rsa.pub >> ~/.ssh/authorized_keys && echo "Key copied to localhost"
+cat $HOMEDIR/.ssh/id_rsa.pub >> $HOMEDIR/.ssh/authorized_keys && echo "Key copied to localhost"
 #terrible hack for getting keys onto db server
-cat ~/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.20 'cat >> .ssh/authorized_keys && echo "Key copied MySQL"'
-cat ~/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.30 'cat >> .ssh/authorized_keys && echo "Key copied MongoDB"'
+cat $HOMEDIR/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.20 'cat >> .ssh/authorized_keys && echo "Key copied MySQL"'
+cat $HOMEDIR/.ssh/id_rsa.pub | sshpass -p $PASSWORD ssh -o "StrictHostKeyChecking no" $AZUREUSER@10.0.0.30 'cat >> .ssh/authorized_keys && echo "Key copied MongoDB"'
+
+#make sure premissions are correct
+sudo chown -R $AZUREUSER:$AZUREUSER $HOMEDIR/.ssh/
 
 ###################################################
 # Update Ubuntu and install prereqs
@@ -137,7 +140,7 @@ echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
-sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=/home/$AZUREUSER/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
+sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=$HOMEDIR/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
 
 date
 echo "Completed Open edX multiserver provision on pid $$"
