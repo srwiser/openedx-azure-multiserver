@@ -114,10 +114,14 @@ export DB_VARS=" \
   -e EDXLOCAL_MEMCACHED_BIND_IP=0.0.0.0 \
   -e XQUEUE_MYSQL_HOST=10.0.0.20 \
   -e ORA_MYSQL_HOST=10.0.0.20 \
-  -e EDXAPP_MONGO_HOSTS=[10.0.0.30] \
   -e MONGO_BIND_IP=0.0.0.0 \
-  -e FORUM_MONGO_HOSTS=[10.0.0.30] \
 "
+
+export MONGO_HOST_LISTS=" \
+  -e { \
+    \"FORUM_MONGO_HOSTS\": [\"10.0.0.30\"], \
+    \"EDXAPP_MONGO_HOSTS\": [\"10.0.0.30\"] \
+  }"
 
 ###################################################
 # Download configuration repo and start ansible
@@ -142,7 +146,7 @@ echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
-sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=$HOMEDIR/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS
+sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=$HOMEDIR/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml $EXTRA_VARS $DB_VARS -e "$MONGO_HOST_LISTS"
 
 date
 echo "Completed Open edX multiserver provision on pid $$"
