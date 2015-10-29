@@ -116,6 +116,7 @@ export DB_VARS=" \
   -e ORA_MYSQL_HOST=10.0.0.20 \
   -e EDXAPP_MONGO_HOSTS=[10.0.0.30] \
   -e MONGO_BIND_IP=0.0.0.0 \
+  -e FORUM_MONGO_HOSTS=[10.0.0.30] \
 "
 
 ###################################################
