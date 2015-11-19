@@ -143,7 +143,7 @@ echo "" >> inventory.ini
 echo "[mysql-server]" >> inventory.ini
 echo "10.0.0.20" >> inventory.ini
 echo "" >> inventory.ini
-echo "[edxapp-server]" >> inventory.ini
+echo "[edxapp-primary-server]" >> inventory.ini
 echo "localhost" >> inventory.ini
 
 curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
