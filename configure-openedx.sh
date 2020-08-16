@@ -98,15 +98,15 @@ time sudo pip install --upgrade virtualenv
 ###################################################
 # Pin specific version of Open edX (named-release/cypress for now)
 ###################################################
-export OPENEDX_RELEASE='named-release/cypress'
+export OPENEDX_RELEASE='named-release/juniper'
 cat >/tmp/extra_vars.yml <<EOL
 ---
 edx_platform_version: "$OPENEDX_RELEASE"
 certs_version: "$OPENEDX_RELEASE"
 forum_version: "$OPENEDX_RELEASE"
 xqueue_version: "$OPENEDX_RELEASE"
-configuration_version: "appsembler/azureDeploy"
-edx_ansible_source_repo: "https://github.com/appsembler/configuration"
+configuration_version: "master"
+edx_ansible_source_repo: "https://github.com/srwiser/configuration"
 
 EOL
 
@@ -133,9 +133,9 @@ EOL
 ###################################################
 
 cd /tmp
-time git clone https://github.com/appsembler/configuration.git
+time git clone https://github.com/srwiser/configuration.git
 cd configuration
-time git checkout appsembler/azureDeploy
+time git checkout master
 time sudo pip install -r requirements.txt
 cd playbooks/appsemblerPlaybooks
 
@@ -149,7 +149,7 @@ echo "" >> inventory.ini
 echo "[edxapp-primary-server]" >> inventory.ini
 echo "localhost" >> inventory.ini
 
-curl https://raw.githubusercontent.com/tkeemon/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
+curl https://raw.githubusercontent.com/srwiser/openedx-azure-multiserver/master/server-vars.yml > /tmp/server-vars.yml
 
 sudo ansible-playbook -i inventory.ini -u $AZUREUSER --private-key=$HOMEDIR/.ssh/id_rsa multiserver_deploy.yml -e@/tmp/server-vars.yml -e@/tmp/extra_vars.yml -e@/tmp/db_vars.yml
 
